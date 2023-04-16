@@ -15,11 +15,19 @@
   font-weight: bold;
 }
 
-.form-control inpit {
+.form-control input {
   font: inherit;
   border: 1px solid rgb(204, 204, 204);
   width: 15rem;
   padding: 0.35rem;
+}
+.error label {
+  color: rgb(136,2,2);
+}
+.error input {
+  border-color: rgb(136,2,2);
+  color: rgb(136,2,2);
+  background-color: rgb(253, 219, 219);
 }
 
 #game-configuration {
