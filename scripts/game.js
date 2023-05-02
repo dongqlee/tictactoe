@@ -13,7 +13,6 @@ function resetGameStatus() {
       const gameBoardItemElement = gameBoardElement.children[gameBoardIndex];
       gameBoardItemElement.textContent = '';
       gameBoardItemElement.classList.remove('disabled');
-      gameBoardElement.children[gameBoardIndex]
       gameBoardIndex++;
     }
   } 
@@ -31,7 +30,47 @@ function startNewGame() {
   gameAreaElement.style.display = 'block';
 }
 
-//논리적인 위치
+function switchPlayer() {
+  if(activePlayer === 0) {
+    activePlayer = 1;
+  } else {
+    activePlayer = 0;
+  }
+  activePlayerNameElement.textContent = players[activePlayer].name;
+}
+
+function selectGameField(event) {
+  if(event.target.tagName !== 'LI' || gameIsOver) {
+    return;
+  }
+  //gameIsOver 넣어서 승패 결정 후 종료
+
+  //선택 배열
+  const selectedField = event.target;
+  const selectedRow = selectedField.dataset.row - 1;
+  const selectedColumn = selectedField.dataset.col -1;
+  //선택 필드 
+
+  if(gameData[selectedRow][selectedColumn] > 0) {
+    alert('Please select an empty field');
+    return;
+  } // 이미 선점한 곳 선택 제한
+
+  selectedField.textContent = players[activePlayer].symbol;
+  selectedField.classList.add('disabled');
+
+  gameData[selectedRow][selectedColumn] = activePlayer + 1;
+
+  const winnerId = checkForGameOver(); //승자 확인
+
+  if(winnerId !== 0) {
+    endGame(winnerId);
+  }
+
+  currentRound++;
+  switchPlayer();
+}
+
 function checkForGameOver() {
   // if(gameData[0][0] === 1 && gameData[0][1] === 1 && gameData[0][2] === 1) // 불필요한 코드가 많아짐.  
   //개선사항 1. 
@@ -84,60 +123,19 @@ function checkForGameOver() {
   if(
     gameData[2][0] > 0 &&
     gameData[2][0] === gameData[1][1] && 
-    gameData[1][1] === gameData[0][0]
+    gameData[1][1] === gameData[0][2]
     ) {
-      return gameData[0][0];
+      return gameData[2][0];
     }  
     //게임 라운드 
-    if(currentRound === 9) {
+  if(currentRound === 9) {
       return -1; //무승부
     }
     return 0; // 승부가 가려지지 않음
 }
 
-function switchPlayer() {
-  if(activePlayer === 0) {
-    activePlayer = 1;
-  } else {
-    activePlayer = 0;
-  }
-  activePlayerNameElement.textContent = players[activePlayer].name;
-}
-
-function selectGameField(event) {
-  if(event.target.tagName !== 'LI' || gameIsOver) {
-    return;
-  }
-  //gameIsOver 넣어서 승패 결정 후 종료
-
-  //선택 배열
-  const selectedField = event.target;
-  const selectedRow = selectedField.dataset.row - 1;
-  const selectedColumn = selectedField.dataset.col -1;
-  //선택 필드 
-
-  if(gameData[selectedRow][selectedColumn] > 0) {
-    alert('Please select an empty field');
-    return;
-  } // 이미 선점한 곳 선택 제한
-
-  selectedField.textContent = players[activePlayer].symbol;
-  selectedField.classList.add('disabled');
-
-  gameData[selectedRow][selectedColumn] = activePlayer + 1;
-
-  const winnerId = checkForGameOver(); //승자 확인
-
-  if(winnerId !== 0) {
-    endGame(winnerId);
-  }
-
-  currentRound++;
-  switchPlayer();
-}
-
 function endGame(winnerId) {
-  gameIsOver = ture;
+  gameIsOver = true;
   gameOverElement.style.display = 'block';
   if(winnerId > 0) {
     const winnerName = players[winnerId -1].name;
@@ -145,5 +143,4 @@ function endGame(winnerId) {
   } else {
     gameOverElement.firstElementChild.textContent = 'it\'s a draw!'
   }
- 
 }

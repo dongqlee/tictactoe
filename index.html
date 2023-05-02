@@ -15,6 +15,12 @@
   <link rel="stylesheet" href="./styles/configuration.css">
   <link rel="stylesheet" href="./styles/game.css">
   
+  <!--
+    app에서 모든 상수 초기화, 게임 시작, 그렇게 하기 위해서는 먼저 구성과 게임 로직에 대한 정의 필요
+    마지막 단계로 정의된 게임과 구성 로직 참조 할 수 있다
+    그래서 config와 game이 먼저 정의되어야 app에 정의된 로직 사용
+    defer을 사용하여 전체 html 내용이 로드 되고 분석된 후에만 실행
+  -->
   <script src="./scripts/config.js" defer></script>
   <script src="./scripts/game.js" defer></script>
   <script src="./scripts/app.js" defer></script>

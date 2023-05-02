@@ -1,4 +1,4 @@
-//로직 검사
+//사용자입력을 받아서 유효성, 로직 검사
 
 function openPlayerConfig(event) {
   editedPlayer = +event.target.dataset.playerid;
